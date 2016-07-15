@@ -1,11 +1,11 @@
-Dear {{ user.username }},
+亲爱的 {{ user.username }},
 
-To confirm your new email address click on the following link:
+请点击确认你的新电子邮件地址：
 
 {{ url_for('auth.change_email', token=token, _external=True) }}
 
-Sincerely,
+谢谢
 
-The SnailWorld
+蜗牛小站
 
 Note: replies to this email address are not monitored.

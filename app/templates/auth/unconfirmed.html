@@ -1,20 +1,19 @@
 {% extends "base.html" %}
 
-{% block title %}SnailWorld - Confirm your account{% endblock %}
+{% block title %}蜗牛小站 - 确认账户{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
     <h1>
-        Hello, {{ current_user.username }}!
+        亲爱的 {{ current_user.username }}!
     </h1>
-    <h3>You have not confirmed your account yet.</h3>
+    <h3>你尚未确认你的账户</h3>
     <p>
-        Before you can access this site you need to confirm your account.
-        Check your inbox, you should have received an email with a confirmation link.
+        在你使用本网站之前，请先检查你的邮件收件箱，点击我们发送的链接，确认你的账户，谢谢！
     </p>
     <p>
-        Need another confirmation email?
-        <a href="{{ url_for('auth.resend_confirmation') }}">Click here</a>
+        没有收到邮件？
+        <a href="{{ url_for('auth.resend_confirmation') }}">点击再次发送</a>
     </p>
 </div>
 {% endblock %}
