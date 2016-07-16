@@ -1,3 +1,4 @@
+# -*- coding:gb2312 -*-
 from datetime import datetime
 from flask import render_template, session, redirect, url_for, abort, flash, request, current_app, make_response
 from flask.ext.login import login_required, current_user
@@ -72,7 +73,7 @@ def edit_profile():
         current_user.location = form.location.data
         current_user.about_me = form.about_me.data
         db.session.add(current_user)
-        flash('æ‚¨çš„ä¸ªäººèµ„æ–™å·²æ›´æ–°.')
+        flash('ÄúµÄ¸öÈË×ÊÁÏÒÑ¸üĞÂ.')
         return redirect(url_for('.user', username=current_user.username))
     form.name.data = current_user.name
     form.location.data = current_user.location
@@ -94,7 +95,7 @@ def edit_profile_admin(id):
         user.location = form.location.data
         user.about_me = form.about_me.data
         db.session.add(user)
-        flash('è¯¥ç”¨æˆ·ä¸ªäººèµ„æ–™å·²æ›´æ–°')
+        flash('¸ÃÓÃ»§¸öÈË×ÊÁÏÒÑ¸üĞÂ')
         return redirect(url_for('.user', username=user.username))
     form.email.data = user.email
     form.username.data = user.username
@@ -115,7 +116,7 @@ def post(id):
                           post=post,
                           author=current_user._get_current_object())
         db.session.add(comment)
-        flash('è¯„è®ºæˆåŠŸï¼')
+        flash('ÆÀÂÛ³É¹¦£¡')
         return redirect(url_for('.post', id=post.id, page=-1))
     page = request.args.get('page', 1, type=int)
     if page == -1:
@@ -140,7 +141,7 @@ def edit(id):
     if form.validate_on_submit():
         post.body = form.body.data
         db.session.add(post)
-        flash('æ–‡ç« å·²æ›´æ–°')
+        flash('ÎÄÕÂÒÑ¸üĞÂ')
         return redirect(url_for('.post', id=post.id))
     form.body.data = post.body
     return render_template('edit_post.html', form=form)
@@ -153,13 +154,13 @@ def edit(id):
 def follow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
-        flash('ç”¨æˆ·ä¸å­˜åœ¨')
+        flash('ÓÃ»§²»´æÔÚ')
         return redirect(url_for('.index'))
     if current_user.is_following(user):
-        flash('æ‚¨å·²å…³æ³¨ %s.' % username)
+        flash('ÄúÒÑ¹Ø×¢ %s.' % username)
         return redirect(url_for('.user', username=username))
     current_user.follow(user)
-    flash('æ‚¨ç°åœ¨å…³æ³¨äº† %s.' % username)
+    flash('ÄúÏÖÔÚ¹Ø×¢ÁË %s.' % username)
     return redirect(url_for('.user', username=username))    
 
 @main.route('/unfollow/<username>')
@@ -168,20 +169,20 @@ def follow(username):
 def unfollow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
-        flash('ç”¨æˆ·ä¸å­˜åœ¨')
+        flash('ÓÃ»§²»´æÔÚ')
         return redirect(url_for('.index'))
     if not current_user.is_following(user):
-        flash('æ‚¨å·²ç»å–æ¶ˆå…³æ³¨è¯¥ç”¨æˆ·')
+        flash('ÄúÒÑ¾­È¡Ïû¹Ø×¢¸ÃÓÃ»§')
         return redirect(url_for('.user', username=username))
     current_user.unfollow(user)
-    flash('æ‚¨å°šæœªå…³æ³¨ %s ' % username)
+    flash('ÄúÉĞÎ´¹Ø×¢ %s ' % username)
     return redirect(url_for('.user', username=username))
 
 @main.route('/followers/<username>')
 def followers(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
-        flash('ç”¨æˆ·ä¸å­˜åœ¨')
+        flash('ÓÃ»§²»´æÔÚ')
         return redirect(url_for('.index'))
     page = request.args.get('page', 1, type=int)
     pagination = user.followers.paginate(page, per_page=current_app.config['FLASKY_FOLLOWERS_PER_PAGE'], error_out=False)
@@ -193,7 +194,7 @@ def followers(username):
 def followed_by(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
-        flash('ç”¨æˆ·ä¸å­˜åœ¨')
+        flash('ÓÃ»§²»´æÔÚ')
         return redirect(url_for('.index'))
     page = request.args.get('page', 1, type=int)
     pagination = user.followed.paginate(

@@ -1,3 +1,4 @@
+# -*- coding:gb2312 -*-
 from flask.ext.wtf import Form
 from flask.ext.pagedown.fields import PageDownField
 from wtforms import StringField, TextAreaField, BooleanField, SelectField,\
@@ -8,24 +9,24 @@ from ..models import Role, User
 
 
 class NameForm(Form):
-    name = StringField('ä½ çš„å§“åæ˜¯ï¼Ÿ', validators=[Required()])
+    name = StringField('ÄãµÄĞÕÃûÊÇ£¿', validators=[Required()])
     submit = SubmitField('Submit')
 
 class EditProfileForm(Form):
-    name = StringField('å§“å', validators=[Length(0, 64)])
-    location = StringField('å±…ä½åœ°', validators=[Length(0, 64)])
-    about_me = TextAreaField('ä¸€å¥è¯ä»‹ç»')
-    submit = SubmitField('ä¿å­˜')
+    name = StringField('ĞÕÃû', validators=[Length(0, 64)])
+    location = StringField('¾Ó×¡µØ', validators=[Length(0, 64)])
+    about_me = TextAreaField('Ò»¾ä»°½éÉÜ')
+    submit = SubmitField('±£´æ')
 
 class EditProfileAdminForm(Form):
-    email = StringField('é‚®ç®±', validators=[Required(), Length(1, 64), Email()])
-    username = StringField('æ˜µç§°', validators=[Required(), Length(1, 64), Regexp('^[A-Za-z0-9_.]*$', 0, 'ç”¨æˆ·åä»…é™å­—æ¯ã€æ•°å­—ã€ç‚¹æˆ–ä¸‹åˆ’çº¿')])
-    confirmed = BooleanField('è´¦æˆ·ç¡®è®¤')
-    role = SelectField('ç”¨æˆ·æƒé™', coerce=int)
-    name = StringField('å§“å', validators=[Length(0, 64)])
-    location = StringField('å±…ä½åœ°', validators=[Length(0, 64)])
-    about_me = TextAreaField('ä¸€å¥è¯ä»‹ç»')
-    submit = SubmitField('ä¿å­˜')
+    email = StringField('ÓÊÏä', validators=[Required(), Length(1, 64), Email()])
+    username = StringField('êÇ³Æ', validators=[Required(), Length(1, 64), Regexp('^[A-Za-z0-9_.]*$', 0, 'ÓÃ»§Ãû½öÏŞ×ÖÄ¸¡¢Êı×Ö¡¢µã»òÏÂ»®Ïß')])
+    confirmed = BooleanField('ÕË»§È·ÈÏ')
+    role = SelectField('ÓÃ»§È¨ÏŞ', coerce=int)
+    name = StringField('ĞÕÃû', validators=[Length(0, 64)])
+    location = StringField('¾Ó×¡µØ', validators=[Length(0, 64)])
+    about_me = TextAreaField('Ò»¾ä»°½éÉÜ')
+    submit = SubmitField('±£´æ')
 
     def __init__(self, user, *args, **kwargs):
         super(EditProfileAdminForm, self).__init__(*args, **kwargs)
@@ -34,16 +35,16 @@ class EditProfileAdminForm(Form):
 
     def validate_email(self, field):
         if field.data != self.user.email and User.query.filter_by(email=field.data).first():
-            raise ValidationError('é‚®ç®±å·²è¢«æ³¨å†Œ')
+            raise ValidationError('ÓÊÏäÒÑ±»×¢²á')
 
     def validate_username(self, field):
         if field.data != self.user.username and User.query.filter_by(username=field.data).first():
-            raise ValidationError('æ˜µç§°å·²è¢«ä½¿ç”¨')
+            raise ValidationError('êÇ³ÆÒÑ±»Ê¹ÓÃ')
 
 class PostForm(Form):
-    body = PageDownField("é—®å›ä½•æ‰€æ€ï¼Ÿ", validators=[Required()])
-    submit = SubmitField('å‘å¸ƒ')
+    body = PageDownField("ÎÊ¾ıºÎËùË¼£¿", validators=[Required()])
+    submit = SubmitField('·¢²¼')
 
 class CommentForm(Form):
-    body = StringField('éšä¾¿è¯´ä¸¤å¥ï¼š', validators=[Required()])
-    submit = SubmitField('å‘å¸ƒ')
+    body = StringField('Ëæ±ãËµÁ½¾ä£º', validators=[Required()])
+    submit = SubmitField('·¢²¼')
