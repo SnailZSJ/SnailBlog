@@ -1,4 +1,3 @@
-# -*- coding:gb2312 -*-
 from flask import render_template, redirect, request, url_for, flash
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from . import auth
@@ -6,6 +5,9 @@ from ..import db
 from ..models import User
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 @auth.before_app_request
@@ -30,14 +32,14 @@ def login():
         if user is not None and user.verify_password(form.password.data):
             login_user(user, form.remember_me.data)
             return redirect(request.args.get('next') or url_for('main.index'))
-        flash('ÓÃ»§Ãû»òÃÜÂë´íÎó£¨ÓÃ»§ÃûÊÇÄãµÄ×¢²áÓÊÏä£©')
+        flash('ç”¨æˆ·åæˆ–å¯†ç é”™è¯¯ï¼ˆç”¨æˆ·åæ˜¯ä½ çš„æ³¨å†Œé‚®ç®±ï¼‰')
     return render_template('auth/login.html', form=form)
 
 @auth.route('/logout')
 @login_required
 def logout():
     logout_user()
-    flash('ÄúÒÑµÇ³öÕË»§')
+    flash('æ‚¨å·²ç™»å‡ºè´¦æˆ·')
     return redirect(url_for('main.index'))
 
 @auth.route('/register', methods=['GET', 'POST'])
@@ -50,9 +52,9 @@ def register():
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
-        send_email(user.email, '»¶Ó­¼ÓÈëÎÏÅ£Ğ¡Õ¾',
+        send_email(user.email, 'æ¬¢è¿åŠ å…¥èœ—ç‰›å°ç«™',
                    'auth/email/confirm', user=user, token=token)
-        flash('È·ÈÏÓÊ¼şÒÑ¾­·¢ËÍµ½ÄãµÄµç×ÓÓÊÏä¡£')
+        flash('ç¡®è®¤é‚®ä»¶å·²ç»å‘é€åˆ°ä½ çš„ç”µå­é‚®ç®±ã€‚')
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', form=form)
 
@@ -62,17 +64,17 @@ def confirm(token):
     if current_user.confirmed:
         return redirect(url_for('main.index'))
     if current_user.confirm(token):
-        flash('ÄúµÄÕË»§ÒÑÈ·ÈÏ£¬Ğ»Ğ»£¡')
+        flash('æ‚¨çš„è´¦æˆ·å·²ç¡®è®¤ï¼Œè°¢è°¢ï¼')
     else:
-        flash('È·ÈÏÁ´½ÓÎŞĞ§»òÒÑ¹ıÆÚ¡£')
+        flash('ç¡®è®¤é“¾æ¥æ— æ•ˆæˆ–å·²è¿‡æœŸã€‚')
     return redirect(url_for('main.index'))
 
 @auth.route('/confirm')
 @login_required
 def resend_confirmation():
     token = current_user.generate_confirmation_token()
-    send_email(current_user.email,'»¶Ó­¼ÓÈëÎÏÅ£Ğ¡Õ¾', 'auth/email/confirm', user=current_user, token=token)
-    flash('Ò»¸öĞÂµÄÈ·ÈÏÓÊ¼şÒÑ¾­·¢ËÍµ½ÄãµÄµç×ÓÓÊÏä¡£')
+    send_email(current_user.email,'æ¬¢è¿åŠ å…¥èœ—ç‰›å°ç«™', 'auth/email/confirm', user=current_user, token=token)
+    flash('ä¸€ä¸ªæ–°çš„ç¡®è®¤é‚®ä»¶å·²ç»å‘é€åˆ°ä½ çš„ç”µå­é‚®ç®±ã€‚')
     return redirect(url_for('main.index'))
 
 @auth.route('/change-password', methods=['GET', 'POST'])
@@ -83,10 +85,10 @@ def change_password():
         if current_user.verify_password(form.old_password.data):
             current_user.password = form.password.data
             db.session.add(current_user)
-            flash('ÄãµÄÃÜÂëÒÑ¸üĞÂ¡£')
+            flash('ä½ çš„å¯†ç å·²æ›´æ–°ã€‚')
             return redirect(url_for('main.index'))
         else:
-            flash('ÃÜÂë´íÎó')
+            flash('å¯†ç é”™è¯¯')
     return render_template("auth/change_password.html", form=form)
 
 @auth.route('/reset', methods=['GET', 'POST'])
@@ -98,11 +100,11 @@ def password_reset_request():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             token = user.generate_reset_token()
-            send_email(user.email, 'ÖØÖÃÃÜÂë',
+            send_email(user.email, 'é‡ç½®å¯†ç ',
                        'auth/email/reset_password',
                        user=user, token=token,
                        next=request.args.get('next'))
-        flash('Ò»·İÖØÖÃÄúÕËºÅÃÜÂëµÄÈ·ÈÏÓÊ¼şÒÑ¾­·¢ËÍµ½ÄãµÄµç×ÓÓÊÏä¡£')
+        flash('ä¸€ä»½é‡ç½®æ‚¨è´¦å·å¯†ç çš„ç¡®è®¤é‚®ä»¶å·²ç»å‘é€åˆ°ä½ çš„ç”µå­é‚®ç®±ã€‚')
         return redirect(url_for('auth.login'))
     return render_template('auth/reset_password.html', form=form)
 
@@ -117,7 +119,7 @@ def password_reset(token):
         if user is None:
             return redirect(url_for('main.index'))
         if user.reset_password(token, form.password.data):
-            flash('ÄãµÄÃÜÂëÒÑ¸üĞÂ¡£')
+            flash('ä½ çš„å¯†ç å·²æ›´æ–°ã€‚')
             return redirect(url_for('auth.login'))
         else:
             return redirect(url_for('main.index'))
@@ -131,13 +133,13 @@ def change_email_request():
         if current_user.verify_password(form.password.data):
             new_email = form.email.data
             token = current_user.generate_email_change_token(new_email)
-            send_email(new_email, 'È·ÈÏµç×ÓÓÊ¼şµØÖ·',
+            send_email(new_email, 'ç¡®è®¤ç”µå­é‚®ä»¶åœ°å€',
                        'auth/email/change_email',
                        user=current_user, token=token)
-            flash('Ò»·İÖØÖÃÄúÕËºÅ¹ØÁªÓÊÏäµÄÈ·ÈÏÓÊ¼şÒÑ¾­·¢ËÍµ½ÄãµÄµç×ÓÓÊÏä¡£')
+            flash('ä¸€ä»½é‡ç½®æ‚¨è´¦å·å…³è”é‚®ç®±çš„ç¡®è®¤é‚®ä»¶å·²ç»å‘é€åˆ°ä½ çš„ç”µå­é‚®ç®±ã€‚')
             return redirect(url_for('main.index'))
         else:
-            flash('ÓÊÏä»òÃÜÂë´íÎó')
+            flash('é‚®ç®±æˆ–å¯†ç é”™è¯¯')
     return render_template("auth/change_email.html", form=form)
 
 
@@ -145,7 +147,7 @@ def change_email_request():
 @login_required
 def change_email(token):
     if current_user.change_email(token):
-        flash('ÄãµÄµç×ÓÓÊ¼şµØÖ·ÒÑ¸üĞÂ¡£')
+        flash('ä½ çš„ç”µå­é‚®ä»¶åœ°å€å·²æ›´æ–°ã€‚')
     else:
-        flash('ÇëÇóÎŞĞ§')
+        flash('è¯·æ±‚æ— æ•ˆ')
     return redirect(url_for('main.index'))

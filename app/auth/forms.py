@@ -1,64 +1,66 @@
-# -*- coding:gb2312 -*-
 from flask.ext.wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
 from ..models import User
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 class LoginForm(Form):
-    email = StringField('ÓÊÏä',validators=[Required(), Length(1,64),Email()])
-    password = PasswordField('ÃÜÂë', validators=[Required()])
-    remember_me = BooleanField('¼Ç×¡ÎÒ')
-    submit = SubmitField('µÇÂ½')
+    email = StringField('é‚®ç®±',validators=[Required(), Length(1,64),Email()])
+    password = PasswordField('å¯†ç ', validators=[Required()])
+    remember_me = BooleanField('è®°ä½æˆ‘')
+    submit = SubmitField('ç™»é™†')
 
 
 class RegistrationForm(Form):
-    email = StringField('ÓÊÏä', validators=[Required(), Length(1, 64),
+    email = StringField('é‚®ç®±', validators=[Required(), Length(1, 64),
                                            Email()])
-    username = StringField('êÇ³Æ', validators=[
+    username = StringField('æ˜µç§°', validators=[
         Required(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
-                                          'ÓÃ»§Ãû±ØĞë½öÏŞ×ÖÄ¸¡¢Êı×Ö¡¢µã»òÏÂ»®Ïß')])
-    password = PasswordField('ÃÜÂë', validators=[
-        Required(), EqualTo('password2', message='ÃÜÂë±ØĞëÆ¥Åä¡£')])
-    password2 = PasswordField('È·ÈÏÃÜÂë', validators=[Required()])
-    submit = SubmitField('×¢²á')
+                                          'ç”¨æˆ·åå¿…é¡»ä»…é™å­—æ¯ã€æ•°å­—ã€ç‚¹æˆ–ä¸‹åˆ’çº¿')])
+    password = PasswordField('å¯†ç ', validators=[
+        Required(), EqualTo('password2', message='å¯†ç å¿…é¡»åŒ¹é…ã€‚')])
+    password2 = PasswordField('ç¡®è®¤å¯†ç ', validators=[Required()])
+    submit = SubmitField('æ³¨å†Œ')
 
     def validate_email(self,field):
         if User.query.filter_by(email=field.data).first():
-            raise ValidationError('´ËÓÊÏäÕËºÅÒÑ±»×¢²á')
+            raise ValidationError('æ­¤é‚®ç®±è´¦å·å·²è¢«æ³¨å†Œ')
 
 
     def validate_username(self, field):
         if User.query.filter_by(username=field.data).first():
-            raise ValidationError('êÇ³ÆÒÑ±»Ê¹ÓÃ¡£')
+            raise ValidationError('æ˜µç§°å·²è¢«ä½¿ç”¨ã€‚')
 
 class ChangePasswordForm(Form):
-    old_password = PasswordField('¾ÉÃÜÂë', validators=[Required()])
-    password = PasswordField('ĞÂÃÜÂë', validators=[
-        Required(), EqualTo('password2', message='ÃÜÂë±ØĞëÆ¥Åä¡£')])
-    password2 = PasswordField('È·ÈÏĞÂÃÜÂë', validators=[Required()])
-    submit = SubmitField('ĞŞ¸ÄÃÜÂë')
+    old_password = PasswordField('æ—§å¯†ç ', validators=[Required()])
+    password = PasswordField('æ–°å¯†ç ', validators=[
+        Required(), EqualTo('password2', message='å¯†ç å¿…é¡»åŒ¹é…ã€‚')])
+    password2 = PasswordField('ç¡®è®¤æ–°å¯†ç ', validators=[Required()])
+    submit = SubmitField('ä¿®æ”¹å¯†ç ')
 
 
 class PasswordResetRequestForm(Form):
-    email = StringField('ÓÊÏä', validators=[Required(), Length(1, 64),
+    email = StringField('é‚®ç®±', validators=[Required(), Length(1, 64),
                                              Email()])
-    submit = SubmitField('ÖØÖÃÃÜÂë')
+    submit = SubmitField('é‡ç½®å¯†ç ')
 
 
 class PasswordResetForm(Form):
-    email = StringField('ÓÊÏä', validators=[Required(), Length(1, 64),
+    email = StringField('é‚®ç®±', validators=[Required(), Length(1, 64),
                                              Email()])
-    password = PasswordField('ĞÂÃÜÂë', validators=[
-        Required(), EqualTo('password2', message='ÃÜÂë±ØĞëÆ¥Åä¡£')])
-    password2 = PasswordField('È·ÈÏÃÜÂë', validators=[Required()])
-    submit = SubmitField('ÖØÖÃÃÜÂë')
+    password = PasswordField('æ–°å¯†ç ', validators=[
+        Required(), EqualTo('password2', message='å¯†ç å¿…é¡»åŒ¹é…ã€‚')])
+    password2 = PasswordField('ç¡®è®¤å¯†ç ', validators=[Required()])
+    submit = SubmitField('é‡ç½®å¯†ç ')
 
 class ChangeEmailForm(Form):
-    email = StringField('ĞÂÓÊÏä', validators=[Required(), Length(1, 64),
+    email = StringField('æ–°é‚®ç®±', validators=[Required(), Length(1, 64),
                                                  Email()])
-    password = PasswordField('ÃÜÂë', validators=[Required()])
-    submit = SubmitField('¸ü»»ÓÊÏä')
+    password = PasswordField('å¯†ç ', validators=[Required()])
+    submit = SubmitField('æ›´æ¢é‚®ç®±')
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first() is None:
