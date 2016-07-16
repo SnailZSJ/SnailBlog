@@ -8,6 +8,11 @@ from .forms import NameForm, EditProfileForm, EditProfileAdminForm, PostForm, Co
 from .. import db
 from ..models import User, Role, Permission, Post, Comment
 from ..decorators import admin_required, permission_required
+import sys
+default_encoding = 'utf-8'
+if sys.getdefaultencoding() != default_encoding:
+    reload(sys)
+    sys.setdefaultencoding(default_encoding)
 
 
 @main.after_app_request
