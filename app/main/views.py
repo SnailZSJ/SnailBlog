@@ -177,10 +177,10 @@ def unfollow(username):
         flash('用户不存在')
         return redirect(url_for('.index'))
     if not current_user.is_following(user):
-        flash('您已经取消关注该用户')
+        flash('您尚未关注 %s ' % username)
         return redirect(url_for('.user', username=username))
     current_user.unfollow(user)
-    flash('您尚未关注 %s ' % username)
+    flash('您已经取消关注 %s ' % username)
     return redirect(url_for('.user', username=username))
 
 @main.route('/followers/<username>')
