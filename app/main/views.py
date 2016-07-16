@@ -1,3 +1,4 @@
+#coding:utf-8
 from datetime import datetime
 from flask import render_template, session, redirect, url_for, abort, flash, request, current_app, make_response
 from flask.ext.login import login_required, current_user
@@ -7,9 +8,6 @@ from .forms import NameForm, EditProfileForm, EditProfileAdminForm, PostForm, Co
 from .. import db
 from ..models import User, Role, Permission, Post, Comment
 from ..decorators import admin_required, permission_required
-import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
 
 
 @main.after_app_request

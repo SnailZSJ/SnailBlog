@@ -1,11 +1,9 @@
+#coding:utf-8
 from flask.ext.wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
 from ..models import User
-import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
 
 class LoginForm(Form):
     email = StringField('邮箱',validators=[Required(), Length(1,64),Email()])
