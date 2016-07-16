@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 
-{% block title %}SnailWorld{% endblock %}
+{% block title %}蜗牛小站{% endblock %}
 
 {% block head %}
 {{ super() }}
@@ -70,4 +70,5 @@
 {% block scripts %}
 {{ super() }}
 {{ moment.include_moment() }}
+{{ moment.lang('zh-cn') }}
 {% endblock %}
