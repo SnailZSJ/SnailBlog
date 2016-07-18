@@ -1,13 +1,9 @@
-#coding:utf-8   
+# -*- coding: utf-8 -*-
 from threading import Thread
 from flask import current_app, render_template
 from flask.ext.mail import Message
 from . import mail
-import sys
-default_encoding = 'gb2312'
-if sys.getdefaultencoding() != default_encoding:
-    reload(sys)
-    sys.setdefaultencoding(default_encoding)
+
 
 def send_async_email(app, msg):
     with app.app_context():
